@@ -42,7 +42,13 @@ namespace library_path_helpers
 		}
 		void get_itunesmobiledevice_path(pfc::array_t<WCHAR> & p_out)
 		{
-			get_path_by_registry_value(L"SOFTWARE\\Apple Inc.\\Apple Mobile Device Support\\Shared", L"iTunesMobileDeviceDLL", p_out, false);
+			try {
+				get_path_by_registry_value(L"SOFTWARE\\Apple Inc.\\Apple Mobile Device Support\\Shared", L"iTunesMobileDeviceDLL", p_out, false);
+			}
+			catch (const pfc::exception & ex) {
+				p_out = L".\\iTunesMobileDevice.dll";
+			}
+
 		}
 		void get_qtsystem_path(pfc::array_t<WCHAR> & p_out)
 		{
@@ -528,7 +534,7 @@ void mobile_device_handle::deinitialise()
 		m_syslog_relay.deinitialise();
 		if (m_device)
 		{
-			lockedAPI->AMDeviceRelease(m_device);
+			//lockedAPI->AMDeviceRelease(m_device);
 			m_device = NULL;
 		}
 	}
@@ -706,8 +712,8 @@ void mobile_device_api::__initialise()
 	SafeMDGPA2(AMDServiceConnectionInvalidate, m_library_mobiledevice);
 	SafeMDGPA2(AMDeviceStopSession, m_library_mobiledevice);
 	SafeMDGPA2(AMDeviceDisconnect, m_library_mobiledevice);
-	SafeMDGPA2(AMDeviceRetain, m_library_mobiledevice);
-	SafeMDGPA2(AMDeviceRelease, m_library_mobiledevice);
+	//SafeMDGPA2(AMDeviceRetain, m_library_mobiledevice);
+	//SafeMDGPA2(AMDeviceRelease, m_library_mobiledevice);
 	SafeMDGPA2(AFCConnectionOpen, m_library_mobiledevice);
 	SafeMDGPA2(AFCConnectionClose, m_library_mobiledevice);
 	SafeMDGPA2(AFCDeviceInfoOpen, m_library_mobiledevice);
@@ -962,7 +968,7 @@ void mobile_device_api::on_mobile_device_connected (am_device * dev)
 		g_drive_manager.set_pending_mobile_device_connection(true);
 
 		mobile_device_handle::ptr device = new mobile_device_handle;
-		lockedAPI->AMDeviceRetain(dev);
+		//lockedAPI->AMDeviceRetain(dev);
 
 		device->m_device = dev;
 		device->m_api = api;

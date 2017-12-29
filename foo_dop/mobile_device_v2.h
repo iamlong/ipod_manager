@@ -41,8 +41,8 @@ struct mobile_device_functionlist
 	MDMP(AMDServiceConnectionInvalidate);
 	MDMP(AMDeviceStopSession);
 	MDMP(AMDevicePair);
-	MDMP(AMDeviceRetain);
-	MDMP(AMDeviceRelease);
+	//MDMP(AMDeviceRetain);
+	//MDMP(AMDeviceRelease);
 	MDMP(AMDeviceNotificationUnsubscribe);
 	MDMP(AMDeviceDisconnect);
 	MDMP(AMDSecureShutdownNotificationProxy);

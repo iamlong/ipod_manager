@@ -211,8 +211,8 @@ typedef mach_error_t (__cdecl * p_AMDeviceSecureStartService_t)(struct am_device
 typedef mach_error_t (__cdecl * p_AMDServiceConnectionInvalidate_t)(service_connection_ref service_connection);
 typedef mach_error_t (__cdecl * p_AMDeviceStopSession_t)(struct am_device *device);
 typedef mach_error_t (__cdecl * p_AMDeviceDisconnect_t)(struct am_device *device);
-typedef struct am_device * (__cdecl * p_AMDeviceRetain_t)(struct am_device *device);
-typedef void (__cdecl * p_AMDeviceRelease_t)(struct am_device *device);
+//typedef struct am_device * (__cdecl * p_AMDeviceRetain_t)(struct am_device *device);
+//typedef void (__cdecl * p_AMDeviceRelease_t)(struct am_device *device);
 typedef mach_error_t (__cdecl * p_AMDeviceNotificationUnsubscribe_t)(struct am_device_notification *notification);
 //typedef HANDLE (__cdecl * p_AMDeviceNotificationGetThreadHandle_t)(struct am_device_notification *notification);
 typedef afc_error_t (__cdecl * p_AFCConnectionOpen_t)(SOCKET handle, unsigned int io_timeout, struct afc_connection **conn);
