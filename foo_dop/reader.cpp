@@ -135,6 +135,7 @@ namespace ipod
 
 			p_status.checkpoint();
 
+			//Steve Comes here to check loading database to write file to 
 			p_status.update_text("Loading database files");
 			service_ptr_t<file> p_file;
 			pfc::string8 database_folder;

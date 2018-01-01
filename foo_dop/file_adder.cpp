@@ -7,6 +7,7 @@
 #include "gapless_scanner.h"
 #include "mp4.h"
 #include "speech.h"
+#include <Wincrypt.h>
 
 bool g_get_album_art_extractor_interface(service_ptr_t<album_art_extractor> & out,const char * path)
 {
@@ -413,20 +414,41 @@ void ipod_add_files::run (ipod_device_ptr_ref_t p_ipod, const pfc::list_base_con
 						if (!filesystem::g_exists(dst, p_abort))
 							filesystem::g_create_directory(dst, p_abort);
 
-						pfc::string8 dstfilename_utf8, dstext;
+						pfc::string8 dstfilename_utf8, tempstr, dstext;
 						if (b_to_convert)
 						{
 							uStringLower(dstext, p_mappings.m_conversion_encoder.m_file_extension);
-							dstfilename_utf8 = pfc::string_filename(items[i]->get_path());
+							tempstr = pfc::string_filename(items[i]->get_path());
 						}
 						else
 						{
 							uStringLower(dstext, pfc::string_extension(items[i]->get_path()));
-							dstfilename_utf8 = pfc::string_filename(items[i]->get_path());
+							tempstr = pfc::string_filename(items[i]->get_path());
 						}
 						if ((mediatype == 0 || mediatype == t_track::type_audio) && !strcmp(dstext, "mp4"))
 							dstext = "m4a";
+
+						HCRYPTPROV hCryptProv;
+						CryptAcquireContext((HCRYPTPROV*)&hCryptProv, NULL, NULL, PROV_RSA_FULL, 0);
+						
+						CryptGenRandom(hCryptProv, 4, (BYTE *)tempstr.get_ptr());
+
+						CryptReleaseContext(hCryptProv, 0);
+
+						for (int i = 0; i < 4; i++) {
+							unsigned char a = (unsigned char)tempstr[i];
+							a = a % 16;
+							if (a > 9)
+								a = a % 10 + 'A';
+							else
+								a = a + '0';
+							dstfilename_utf8.add_byte(a);
+						}
+
+
+
 						dstfilename_utf8 << "." << dstext;
+						
 						pfc::string8 dstfilename;
 						{
 							//pfc::string8 dstfilename = pfc::stringcvt::string_codepage_from_utf8(pfc::stringcvt::codepage_ascii, dstfilename_utf8.get_ptr());
